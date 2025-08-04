@@ -1,0 +1,65 @@
+services:
+  - type: web
+    name: n8n-service
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+
+    envVars:
+      - key: N8N_PORT
+        value: 5678
+      - key: N8N_PROTOCOL
+        value: http
+      - key: N8N_HOST
+        value: 0.0.0.0
+      - key: WEBHOOK_URL
+        value: https://n8n-service-st1q.onrender.com
+      - key: N8N_EDITOR_BASE_URL
+        value: https://n8n-service-st1q.onrender.com
+
+      - key: GENERIC_TIMEZONE
+        value: America/Sao_Paulo
+
+      - key: NODE_ENV
+        value: production
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+
+      - key: DB_TYPE
+        value: postgres
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: n8n-db
+          property: host
+      - key: DB_POSTGRESDB_PORT
+        value: 5432
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: n8n-db
+          property: database
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: n8n-db
+          property: user
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: password
+
+      - key: N8N_EXPRESS_TRUST_PROXY
+        value: "true"
+      - key: N8N_CUSTOM_EXTENSIONS_ENV
+        value: "true"
+      - key: N8N_ALLOW_LOADING_CUSTOM_NODES
+        value: "true"
+      - key: N8N_DISABLE_PRODUCTION_MAIN_PACKAGE_LOADING
+        value: "true"
+      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+        value: "false"
+      - key: N8N_DIAGNOSTICS_ENABLED
+        value: "false"
+
+databases:
+  - name: n8n-db
+    plan: free
